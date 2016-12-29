@@ -28,7 +28,7 @@ struct Bounds3d {
         return *this;
     }
     
-    Bounds3d extend(const Vector3d &v) {
+    void extend(const Vector3d &v) {
         posMin = posMin.minimum(v);
         posMax = posMax.maximum(v);
     }

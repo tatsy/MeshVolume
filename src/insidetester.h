@@ -39,9 +39,10 @@ struct BVHNode {
 
 class InsideTester {
 public:
-    InsideTester();
+    InsideTester() {
+    }
 
-    InsideTester(const std::shared_ptr<Mesh> &mesh_) {
+    explicit InsideTester(const std::shared_ptr<Mesh> &mesh_) {
         this->mesh = mesh_;
         initialize(*mesh_);
     }
@@ -73,7 +74,7 @@ public:
     
     BVHNode * construct(int index, const Bounds2d &bounds, int depth, std::vector<IndexedAABB> &AABBs) {
         if (AABBs.empty()) {
-            return;
+            return nullptr;
         }
 
         if (AABBs.size() == 1) {

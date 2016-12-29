@@ -11,8 +11,6 @@
 
 using namespace MeshVolume;
 
-const std::string filename = "../../../data/bunny.obj";
-
 void progressBar(int x, int total, int width = 50) {
     double ratio = (double)x / total;
     int tick = (int)(width * ratio);
@@ -22,7 +20,7 @@ void progressBar(int x, int total, int width = 50) {
     printf("%c", x >= total ? '\n' : '\r');
 }
 
-double volume(const InsideTester &mesh, const Sphere &sph, const Bounds3d &bounds, int depth = 0, double tol=1.0e-6) {
+double volume(const InsideTester &mesh, const Sphere &sph, const Bounds3d &bounds, int depth = 0, double tol=1.0e-8) {
     // Tolerance
     if (bounds.volume() < tol) {
         return 0.0;
@@ -63,7 +61,13 @@ double volume(const InsideTester &mesh, const Sphere &sph, const Bounds3d &bound
 }
 
 int main(int argc, char **argv) {
+    if (argc <= 1) {
+        std::cerr << "usage: demo [OBJ file]" << std::endl;
+        std::exit(1);
+    }
+
     // Load mesh
+    const std::string filename(argv[1]);
     auto mesh = std::shared_ptr<Mesh>(new Mesh(filename));
     InsideTester tester(mesh);
     
@@ -81,7 +85,7 @@ int main(int argc, char **argv) {
     std::vector<double> volumes(mesh->vertices.size());
     for (int i = 0; i < mesh->vertices.size(); i++) {
         Sphere sph(mesh->vertices[i], radius);
-        volumes[i] = volume(mesh, sph, bbox);
+        volumes[i] = volume(tester, sph, bbox);
         if (i % 100 == 0) {
             progressBar(i + 1, mesh->vertices.size());
             std::fflush(stdout);

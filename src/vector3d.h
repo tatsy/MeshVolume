@@ -4,6 +4,7 @@
 #include <cmath>
 #include <string>
 #include <sstream>
+#include <algorithm>
 
 namespace MeshVolume {
 
